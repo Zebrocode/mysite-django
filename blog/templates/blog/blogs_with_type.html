@@ -1,0 +1,11 @@
+{% extends 'blog/blog_list.html'%}
+
+
+{# 页面标题 #}
+{% block title%}
+    {{blog_type.type_name}}
+{% endblock%}
+
+{% block blog_title_list %}
+    {{blog_type.type_name}}(一共有{{blogs|length}}篇)
+{% endblock %}
