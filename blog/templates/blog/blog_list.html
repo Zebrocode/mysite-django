@@ -15,9 +15,9 @@
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-9">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{% block blog_list_tile %}博客列表(一共有{{ page_of_blogs.paginator.count }}篇博客){% endblock %}</div>
+                    <div class="panel-heading">{% block blog_title_list %}博客列表{% endblock %}</div>
                     <div class="panel-body">
-                        {% for blog in page_of_blogs.object_list %}
+                        {% for blog in blogs %}
                             <div class="blog">
                                 <a href="{% url 'blog_detail' blog.pk %}">
                                     <h3>{{ blog.title }}</h3>
@@ -32,7 +32,8 @@
                         {% empty %}
                             ---no blog---
                         {% endfor %}
-                    </div>  
+                    </div>
+                    <div class="paginator">
                         <!-- 我是底部的分页导航栏~ -->
                         <ul class="pagination">
                             <!-- 一定要有左右的处理不然分页器不能正常工作 可能与模板有关 -->
@@ -42,12 +43,19 @@
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 {% else %}
-                                    <span aria-hidden="true">&laquo;</span>
+                                    <!-- <span aria-hidden="true">&laquo;</span> -->
                                 {% endif %}  
                             </li>
 
-                            {% for page_num in page_of_blogs.paginator.page_range %}
-                                <li><a href="?page={{ page_num }}">{{page_num}}</a></li>
+                            {% for page_num in page_range %}
+                                {% if page_num == page_of_blogs.number %}
+                                    <li class="active"><span>{{page_num}}</span></li>
+                                {% elif page_num == '...' %}
+                                    <li><span>{{page_num}}</span></li>
+                                {% else %}
+                                    <li><a href="?page={{ page_num }}">{{page_num}}</a></li>
+                                {% endif %}
+
                             {% endfor %}
 
                             <li>
@@ -56,11 +64,12 @@
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 {% else %}
-                                <span aria-hidden="true">&raquo;</span>
+                                <!-- <span aria-hidden="true">&raquo;</span> -->
                                 {% endif %} 
                             </li>
                         </ul>
-                      
+                        <p>一共有{{page_of_blogs.paginator.num_pages}}页,{{page_of_blogs.paginator.count}}篇博客</p>
+                    </div>    
                 </div>
             </div>
             <!-- 我是右侧的博客分类 -->
